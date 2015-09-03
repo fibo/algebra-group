@@ -45,6 +45,9 @@ Z.contains(2) // true
 Z.contains(2.5) // false
 Z.contains('xxx') // false
 Z.notContains(false) // true
+Z.notContains(Math.PI) // true
+Z.contains(-2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9) // true
+Z.contains(1, 2, 3, 4.5) // false, 4.5 is not an integer
 
 Z.addition(1, 2) // 3
 Z.addition(1, 2, 3, 4) // 10
@@ -63,7 +66,7 @@ Create R, the group of real numbers with multiplication as composition law.
 It makes sense to change customize prop names, which defaults to additive group naming.
 
 ```
-function isReal (a) {
+function isReal (n) {
   // NaN, Infinity and -Infinity are not allowed
   return (typeof n === 'number') && isFinite(n)
 }

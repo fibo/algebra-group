@@ -61,7 +61,7 @@ function algebraGroup (define, naming) {
        return true
   }
 
-  function notContains (a) { return ! contains.apply(arguments) }
+  function notContains (a) { return ! contains(a) }
 
   function equality () {
     return [].slice.call(arguments).reduce(define.equality, [])

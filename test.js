@@ -23,12 +23,14 @@ var Z = algebraGroup({
 })
 
 test('Integer additive group', function (t) {
-  t.plan(10)
+  t.plan(12)
 
   t.ok(Z.contains(2))
   t.notOk(Z.contains(2.5))
   t.notOk(Z.contains('xxx'))
-  t.skip("Z.notContains(Math.PI)")
+  t.ok(Z.notContains(Math.PI))
+  t.ok(Z.contains(-2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9))
+  t.notOk(Z.contains(1, 2, 3, 4.5))
 
   t.equal(Z.addition(1, 2), 3)
   t.equal(Z.addition(1, 2, 3, 4), 10)
@@ -41,7 +43,7 @@ test('Integer additive group', function (t) {
   t.ok(Z.equality(Z.subtraction(2, 2), Z.zero))
 })
 
-function isReal (a) {
+function isReal (n) {
   return (typeof n === 'number') && isFinite(n)
 }
 
@@ -62,8 +64,9 @@ var R = algebraGroup({
 })
 
 test('Real multiplicative group', function (t) {
-  t.plan(1)
+  t.plan(2)
 
-  t.skip("R.contains(10)")
+  t.ok(R.contains(10))
+  t.notOk(R.contains('xxx'))
 })
 
