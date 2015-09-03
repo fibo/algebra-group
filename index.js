@@ -2,54 +2,96 @@
 /**
  * Define an algebra group structure
  *
- * @param {Function} contains
- * @param {*} identity a.k.a zero
- * @param {Function} equality
- * @param {Function} addition a.k.a composition law
- * @param {Function} negation
+ * @param {Object}   define
+ * @param {*}        define.identity a.k.a zero
+ * @param {Function} define.contains
+ * @param {Function} define.equality
+ * @param {Function} define.compositionLaw
+ * @param {Function} define.inversion
+ * @param {Object} [naming]
+ * @param {String} [naming.identity=zero]
+ * @param {String} [naming.contains=contains]
+ * @param {String} [naming.equality=equality]
+ * @param {String} [naming.compositionLaw=addition]
+ * @param {String} [naming.inversion=negation]
+ * @param {String} [naming.inverseCompositionLaw=subtraction]
+ * @param {String} [naming.notContains=notContains]
  *
  * @returns {Object} group
  */
 
-function algebraGroup (contains, identity, equality, addition, negation) {
+function algebraGroup (define, naming) {
   var group = {}
 
-  // operators
+  if (typeof define === 'undefined') define = {}
 
-  if (typeof contains !== 'function')
-    throw new TypeError('"contains" operator must be a function')
+  if (typeof naming === 'undefined') naming = {}
 
-  function notContains (a) { return ! contains(a) }
+  // default attribute naming
 
-  if (typeof equality !== 'function')
-    throw new TypeError('"equality" operator must be a function')
-
-  function disequality (a, b) { return ! equality(a, b) }
-
-  if (typeof addition !== 'function')
-    throw new TypeError('"addition" operator must be a function')
-
-  if (typeof negation !== 'function')
-    throw new TypeError('"negation" operator must be a function')
-
-  function subtraction (a, b) {
-    return addition(a, negation(b)) 
+  var defaultNaming = {
+    compositionLaw        : 'addition',
+    identity              : 'zero',
+    inverseCompositionLaw : 'subtraction',
+    inversion             : 'negation'
   }
 
-  group.contains    = contains
-  group.notContains = notContains
-  group.addition    = addition
-  group.negation    = negation
-  group.subtraction = subtraction
-  group.equality    = equality
-  group.disequality = disequality
+  function prop (name) {
+    if (typeof naming[name] === 'string')
+      return naming[name]
+
+    if (typeof defaultNaming[name] === 'string')
+      return defaultNaming[name]
+
+    return name
+  }
+
+  // operators
+  function compositionLaw () {
+    return [].slice.call(arguments).reduce(define.compositionLaw)
+  }
+
+  function contains () {
+    var arg = [].slice.call(arguments)
+
+    for (var i in arg)
+      if (! define.contains(arg[i]))
+        return false
+
+       return true
+  }
+
+  function notContains (a) { return ! contains.apply(arguments) }
+
+  function equality () {
+    return [].slice.call(arguments).reduce(define.equality, [])
+  }
+
+  function disequality (a, b) { return ! equality.apply(arguments) }
+
+  function inverseCompositionLaw (a, b) {
+    return compositionLaw.bind(null, a, define.inversion(b)).apply(arguments)
+  }
+
+  group[prop('contains')]              = contains
+  group[prop('notContains')]           = notContains
+  group[prop('compositionLaw')]        = compositionLaw
+  group[prop('inversion')]             = define.inversion
+  group[prop('inverseCompositionLaw')] = inverseCompositionLaw
+  group[prop('equality')]              = define.equality
+  group[prop('disequality')]           = disequality
 
   // identity element
+  var e = define.identity
 
-  if (notContains(identity))
+  if (notContains(e))
     throw new TypeError('"identity" must be contained in group set')
 
-  group.zero = identity
+  // Check that e+e=e.
+  if (disequality(define.compositionLaw(e, e), e))
+    throw new TypeError('"identity" is not neutral')
+
+  group[prop('identity')] = e
 
   return group
 }
