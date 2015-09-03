@@ -69,8 +69,10 @@ function algebraGroup (define, naming) {
 
   function disequality (a, b) { return ! equality.apply(arguments) }
 
-  function inverseCompositionLaw (a, b) {
-    return compositionLaw.bind(null, a, define.inversion(b)).apply(arguments)
+  function inverseCompositionLaw (a) {
+    var rest = [].slice.call(arguments, 1)
+
+    return compositionLaw(a, rest.map(define.inversion).reduce(define.compositionLaw))
   }
 
   group[prop('contains')]              = contains
