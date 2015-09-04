@@ -49,7 +49,7 @@ function isReal (n) {
 
 function multiplication (a, b) { return a * b }
 
-function inversion (a) { 1 / a }
+function inversion (a) { return 1 / a }
 
 var R = algebraGroup({
   identity       : 1,
@@ -61,12 +61,18 @@ var R = algebraGroup({
   compositionLaw       : 'multiplication',
   identity             : 'one',
   inverseCompositionLaw: 'division',
+  inversion            : 'inversion'
 })
 
 test('Real multiplicative group', function (t) {
-  t.plan(2)
+  t.plan(5)
 
   t.ok(R.contains(10))
-  t.notOk(R.contains('xxx'))
+  t.ok(R.contains(Math.PI, Math.E, 0, 1.7, -100))
+  t.ok(R.notContains(Infinity))
+
+  t.equal(R.inversion(2), 0.5)
+
+  t.ok(R.equality(R.multiplication(2, 3, 5), R.division(60, 2)))
 })
 

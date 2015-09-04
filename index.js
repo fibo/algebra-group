@@ -1,13 +1,13 @@
 
 /**
- * Define an algebra group structure
+ * given an algebra group structure
  *
- * @param {Object}   define
- * @param {*}        define.identity a.k.a zero
- * @param {Function} define.contains
- * @param {Function} define.equality
- * @param {Function} define.compositionLaw
- * @param {Function} define.inversion
+ * @param {Object}   given
+ * @param {*}        given.identity a.k.a neutral element
+ * @param {Function} given.contains
+ * @param {Function} given.equality
+ * @param {Function} given.compositionLaw
+ * @param {Function} given.inversion
  * @param {Object} [naming]
  * @param {String} [naming.identity=zero]
  * @param {String} [naming.contains=contains]
@@ -20,10 +20,10 @@
  * @returns {Object} group
  */
 
-function algebraGroup (define, naming) {
+function algebraGroup (given, naming) {
   var group = {}
 
-  if (typeof define === 'undefined') define = {}
+  if (typeof given === 'undefined') given = {}
 
   if (typeof naming === 'undefined') naming = {}
 
@@ -48,14 +48,14 @@ function algebraGroup (define, naming) {
 
   // operators
   function compositionLaw () {
-    return [].slice.call(arguments).reduce(define.compositionLaw)
+    return [].slice.call(arguments).reduce(given.compositionLaw)
   }
 
   function contains () {
     var arg = [].slice.call(arguments)
 
     for (var i in arg)
-      if (! define.contains(arg[i]))
+      if (! given.contains(arg[i]))
         return false
 
        return true
@@ -63,34 +63,30 @@ function algebraGroup (define, naming) {
 
   function notContains (a) { return ! contains(a) }
 
-  function equality () {
-    return [].slice.call(arguments).reduce(define.equality, [])
-  }
-
-  function disequality (a, b) { return ! equality.apply(arguments) }
+  function disequality (a, b) { return ! given.equality(a, b) }
 
   function inverseCompositionLaw (a) {
     var rest = [].slice.call(arguments, 1)
 
-    return compositionLaw(a, rest.map(define.inversion).reduce(define.compositionLaw))
+    return compositionLaw(a, rest.map(given.inversion).reduce(given.compositionLaw))
   }
 
   group[prop('contains')]              = contains
   group[prop('notContains')]           = notContains
   group[prop('compositionLaw')]        = compositionLaw
-  group[prop('inversion')]             = define.inversion
+  group[prop('inversion')]             = given.inversion
   group[prop('inverseCompositionLaw')] = inverseCompositionLaw
-  group[prop('equality')]              = define.equality
+  group[prop('equality')]              = given.equality
   group[prop('disequality')]           = disequality
 
   // identity element
-  var e = define.identity
+  var e = given.identity
 
   if (notContains(e))
     throw new TypeError('"identity" must be contained in group set')
 
   // Check that e+e=e.
-  if (disequality(define.compositionLaw(e, e), e))
+  if (disequality(given.compositionLaw(e, e), e))
     throw new TypeError('"identity" is not neutral')
 
   group[prop('identity')] = e

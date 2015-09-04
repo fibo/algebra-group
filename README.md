@@ -62,8 +62,8 @@ Z.equality(Z.subtraction(2, 2), Z.zero) // true
 
 ### Multiplicative group
 
-Create R, the group of real numbers with multiplication as composition law.
-It makes sense to change customize prop names, which defaults to additive group naming.
+Create R, the group of [Real numbers](https://en.wikipedia.org/wiki/Real_number) with multiplication as composition law.
+It makes sense to customize group props, which defaults to additive group naming.
 
 ```
 function isReal (n) {
@@ -73,7 +73,7 @@ function isReal (n) {
 
 function multiplication (a, b) { return a * b }
 
-function inversion (a) { 1 / a }
+function inversion (a) { return 1 / a }
 
 // Create Real multiplicative group a.k.a (R, *).
 var R = algebraGroup({
@@ -86,11 +86,18 @@ var R = algebraGroup({
   compositionLaw       : 'multiplication',
   identity             : 'one',
   inverseCompositionLaw: 'division',
+  inversion            : 'inversion'
 })
 ```
 
 ```
 R.contains(10) // true
+R.contains(Math.PI, Math.E, 0, 1.7, -100) // true
+R.notContains(Infinity) // true
+
+R.inversion(2) // 0.5
+
+R.equality(R.multiplication(2, 3, 5), R.division(60, 2)) // true, 2 * 3 * 5 = 30 = 60 / 2
 ```
 
   [1]: https://en.wikipedia.org/wiki/Group_(mathematics) "Group"
