@@ -23,7 +23,7 @@
   "bugs": {
     "url": "https://github.com/fibo/algebra-group/issues"
   },
-  "homepage": "https://github.com/fibo/algebra-group",
+  "homepage": "http://npm.im/algebra-group",
   "devDependencies": {
     "tap-min": "^1.0.0",
     "tape": "^4.2.0"
