@@ -38,7 +38,14 @@ var Z = algebraGroup({
 })
 ```
 
-You get a group object with *zero* identity and group operators.
+You get a group object with *zero* identity and the following group operators:
+* contains
+* notContains
+* equality
+* disequality
+* addition
+* subtraction
+* negation
 
 ```
 Z.contains(2) // true
@@ -90,6 +97,15 @@ var R = algebraGroup({
 })
 ```
 
+You get a group object with *one* identity and the following group operators:
+* contains
+* notContains
+* equality
+* disequality
+* multiplication
+* division
+* inversion
+ 
 ```
 R.contains(10) // true
 R.contains(Math.PI, Math.E, 0, 1.7, -100) // true
