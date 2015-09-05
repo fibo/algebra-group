@@ -88,9 +88,7 @@ var R = algebraGroup({
   inverseCompositionLaw: 'division',
   inversion            : 'inversion'
 })
-```
 
-```
 R.contains(10) // true
 R.contains(Math.PI, Math.E, 0, 1.7, -100) // true
 R.notContains(Infinity) // true

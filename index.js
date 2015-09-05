@@ -47,6 +47,7 @@ function algebraGroup (given, naming) {
   }
 
   // operators
+
   function compositionLaw () {
     return [].slice.call(arguments).reduce(given.compositionLaw)
   }
@@ -83,11 +84,11 @@ function algebraGroup (given, naming) {
   var e = given.identity
 
   if (notContains(e))
-    throw new TypeError('"identity" must be contained in group set')
+    throw new TypeError('algebra-group: "identity" must be contained in group set')
 
   // Check that e+e=e.
   if (disequality(given.compositionLaw(e, e), e))
-    throw new TypeError('"identity" is not neutral')
+    throw new TypeError('algebra-group: "identity" is not neutral')
 
   group[prop('identity')] = e
 
