@@ -1,10 +1,19 @@
 {
   "name": "algebra-group",
+  "description": "defines and algebra group structure",
   "version": "0.2.0",
-  "description": "define and algebra group structure",
+  "homepage": "http://npm.im/algebra-group",
+  "author": {
+    "name": "Gianluca Casati",
+    "url": "http://g14n.info"
+  },
+  "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "test": "node test.js | ./node_modules/tap-min/bin/tap-min"
+    "postversion": "git push origin v${npm_package_version}; npm publish; git push origin master",
+    "standard": "standard *.js",
+    "tap": "node test.js | ./node_modules/tap-min/bin/tap-min",
+    "test": "npm run standard && npm run tap"
   },
   "repository": {
     "type": "git",
@@ -13,17 +22,9 @@
   "keywords": [
     "algebra"
   ],
-  "author": "",
-  "license": [
-    {
-      "type": "MIT",
-      "url": "http://g14n.info/mit-license"
-    }
-  ],
   "bugs": {
     "url": "https://github.com/fibo/algebra-group/issues"
   },
-  "homepage": "http://npm.im/algebra-group",
   "devDependencies": {
     "tap-min": "^1.0.0",
     "tape": "^4.2.0"

@@ -1,6 +1,5 @@
-
-var algebraGroup = require('./index'),
-    test         = require('tape')
+var algebraGroup = require('./index')
+var test = require('tape')
 
 var zero = 0
 
@@ -15,11 +14,11 @@ function addition (a, b) { return a + b }
 function negation (a) { return -a }
 
 var Z = algebraGroup({
-  identity       : zero,
-  contains       : isInteger,
-  equality       : equality,
-  compositionLaw : addition,
-  inversion      : negation
+  identity: zero,
+  contains: isInteger,
+  equality: equality,
+  compositionLaw: addition,
+  inversion: negation
 })
 
 test('Integer additive group', function (t) {
@@ -52,16 +51,16 @@ function multiplication (a, b) { return a * b }
 function inversion (a) { return 1 / a }
 
 var R = algebraGroup({
-  identity       : 1,
-  contains       : isReal,
-  equality       : equality,
-  compositionLaw : multiplication,
-  inversion      : inversion
+  identity: 1,
+  contains: isReal,
+  equality: equality,
+  compositionLaw: multiplication,
+  inversion: inversion
 }, {
-  compositionLaw       : 'multiplication',
-  identity             : 'one',
+  compositionLaw: 'multiplication',
+  identity: 'one',
   inverseCompositionLaw: 'division',
-  inversion            : 'inversion'
+  inversion: 'inversion'
 })
 
 test('Real multiplicative group', function (t) {
@@ -75,4 +74,3 @@ test('Real multiplicative group', function (t) {
 
   t.ok(R.equality(R.multiplication(2, 3, 5), R.division(60, 2)))
 })
-

@@ -1,6 +1,8 @@
 # algebra-group
 
-> define an [algebra group][1] structure
+> defines an [algebra group][1] structure
+
+[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
 ## Example
 
@@ -30,11 +32,11 @@ function negation (a) { return -a }
 
 // Create Integer additive group a.k.a (Z, +).
 var Z = algebraGroup({
-  identity       : zero,
-  contains       : isInteger,
-  equality       : equality,
-  compositionLaw : addition,
-  inversion      : negation
+  identity: zero,
+  contains: isInteger,
+  equality: equality,
+  compositionLaw: addition,
+  inversion: negation
 })
 ```
 
@@ -84,16 +86,16 @@ function inversion (a) { return 1 / a }
 
 // Create Real multiplicative group a.k.a (R, *).
 var R = algebraGroup({
-  identity       : 1,
-  contains       : isReal,
-  equality       : equality,
+  identity: 1,
+  contains: isReal,
+  equality: equality,
   compositionLaw : multiplication,
-  inversion      : inversion
+  inversion: inversion
 }, {
-  compositionLaw       : 'multiplication',
-  identity             : 'one',
+  compositionLaw: 'multiplication',
+  identity: 'one',
   inverseCompositionLaw: 'division',
-  inversion            : 'inversion'
+  inversion: 'inversion'
 })
 
 ```
