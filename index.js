@@ -1,3 +1,26 @@
+var packageName = 'algebra-group'
+
+var error = {
+  argumentIsNotInGroup: function (err) {
+    return packageName + ': "' + err.op +
+      '" must be called with arguments contained in group set'
+  },
+  resultIsNotInGroup: function (err) {
+    return packageName + ': "' + err.op +
+      '" must return value contained in group set'
+  },
+  equalityDoesNotReturnBoolean: packageName + ': "equality" must return boolean value',
+  identityIsNotInGroup: packageName + ': "identity" must be contained in group set',
+  identityIsNotNeutral: packageName + ': "identity" is not neutral'
+}
+
+function buildError (type, err) {
+  if (typeof error[type] === 'function') {
+    return error[type](err)
+  } else {
+    return error[type]
+  }
+}
 
 /**
  * given an algebra group structure
@@ -52,15 +75,38 @@ function algebraGroup (given, naming) {
     return name
   }
 
+  function secureOperationCreator (ops, opName, arity, resultValidator) {
+    return function () {
+      var args = [].slice.call(arguments, 0, arity)
+      var err = !contains.apply(null, args)
+      if (err) {
+        throw new TypeError(buildError('argumentIsNotInGroup', {op: opName}))
+      }
+
+      var result = ops[opName].apply(null, args)
+      if (!resultValidator.validate(result)) {
+        throw new TypeError(buildError(resultValidator.error, {op: opName}))
+      }
+      return result
+    }
+  }
+
   // operators
 
+  var groupValidator = {
+    validate: given.contains,
+    error: 'resultIsNotInGroup'
+  }
+
+  var secureCompositionLaw = secureOperationCreator(given, 'compositionLaw', 2, groupValidator)
+  var secureInversion = secureOperationCreator(given, 'inversion', 1, groupValidator)
+
   function compositionLaw () {
-    return [].slice.call(arguments).reduce(given.compositionLaw)
+    return [].slice.call(arguments).reduce(secureCompositionLaw)
   }
 
   function contains () {
     var arg = [].slice.call(arguments)
-
     for (var i in arg) {
       if (!given.contains(arg[i])) {
         return false
@@ -77,13 +123,13 @@ function algebraGroup (given, naming) {
   function inverseCompositionLaw (a) {
     var rest = [].slice.call(arguments, 1)
 
-    return compositionLaw(a, rest.map(given.inversion).reduce(given.compositionLaw))
+    return secureCompositionLaw(a, rest.map(secureInversion).reduce(secureCompositionLaw))
   }
 
   group[prop('contains')] = contains
   group[prop('notContains')] = notContains
   group[prop('compositionLaw')] = compositionLaw
-  group[prop('inversion')] = given.inversion
+  group[prop('inversion')] = secureInversion
   group[prop('inverseCompositionLaw')] = inverseCompositionLaw
   group[prop('equality')] = given.equality
   group[prop('disequality')] = disequality
@@ -91,13 +137,18 @@ function algebraGroup (given, naming) {
   // identity element
   var e = given.identity
 
-  if (notContains(e)) {
-    throw new TypeError('algebra-group: "identity" must be contained in group set')
+  if (!given.contains(e)) {
+    throw new TypeError(buildError('identityIsNotInGroup'))
   }
 
   // Check that e+e=e.
-  if (disequality(given.compositionLaw(e, e), e)) {
-    throw new TypeError('algebra-group: "identity" is not neutral')
+  if (!given.equality(given.compositionLaw(e, e), e)) {
+    throw new TypeError(buildError('identityIsNotNeutral'))
+  }
+
+  // Check that e===e.
+  if (given.equality(e, e) !== true) {
+    throw new TypeError(buildError('equalityDoesNotReturnBoolean'))
   }
 
   group[prop('identity')] = e
