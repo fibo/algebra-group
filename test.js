@@ -171,39 +171,3 @@ test('Argument exceptions in (0,1] multiplicative group', function (t) {
     RfromZeroToOne.division(0, 1, 1, 1)
   }, new RegExp('algebra-group: "compositionLaw" must be called with arguments contained in group set'))
 })
-
-var RfromHalfToTwo = algebraGroup({
-  identity: 1,
-  contains: inRange(0.5, 2),
-  equality: equality,
-  compositionLaw: multiplication,
-  inversion: inversion
-}, {
-  compositionLaw: 'multiplication',
-  identity: 'one',
-  inverseCompositionLaw: 'division',
-  inversion: 'inversion'
-})
-
-test('Not closed sets exceptions in [0.5,2] multiplicative set', function (t) {
-  t.plan(7)
-
-  t.notOk(RfromHalfToTwo.contains(10), 'value greater than 1 is not contained in group')
-  t.ok(RfromHalfToTwo.contains(0.6, 2, 1, 1.33), 'values between 0.5 and 2 are contained in group')
-  t.ok(RfromHalfToTwo.notContains(0.5), 'value less than or equal to 0.5 is not contained in group')
-  t.notOk(RfromHalfToTwo.notContains(1.618), 'notContains returns false with 1.618 argument')
-
-  t.throws(function () {
-    RfromHalfToTwo.inversion(2)
-  }, new RegExp('algebra-group: "inversion" must return value contained in group set'))
-
-  t.throws(function () {
-    RfromHalfToTwo.multiplication(1, 1.5, 1.5, 0.5)
-  }, new RegExp('algebra-group: "compositionLaw" must return value contained in group set'))
-
-  // Derivated operations:
-
-  t.throws(function () {
-    RfromHalfToTwo.division(1.5, 1.5, 1.5, 1.5)
-  }, new RegExp('algebra-group: "compositionLaw" must return value contained in group set'))
-})

@@ -1,25 +1,14 @@
-var packageName = 'algebra-group'
-
 var error = {
-  argumentIsNotInGroup: function (err) {
-    return packageName + ': "' + err.op +
-      '" must be called with arguments contained in group set'
-  },
-  resultIsNotInGroup: function (err) {
-    return packageName + ': "' + err.op +
-      '" must return value contained in group set'
-  },
-  equalityDoesNotReturnBoolean: packageName + ': "equality" must return boolean value',
-  identityIsNotInGroup: packageName + ': "identity" must be contained in group set',
-  identityIsNotNeutral: packageName + ': "identity" is not neutral'
+  argumentIsNotInGroup: 'algebra-group: "${op}" must be called with arguments contained in group set',
+  equalityDoesNotReturnBoolean: 'algebra-group: "equality" must return boolean value',
+  identityIsNotInGroup: 'algebra-group: "identity" must be contained in group set',
+  identityIsNotNeutral: 'algebra-group: "identity" is not neutral'
 }
 
-function buildError (type, err) {
-  if (typeof error[type] === 'function') {
-    return error[type](err)
-  } else {
-    return error[type]
-  }
+function buildError (type, params) {
+  return error[type].replace(/\$\{(.*)\}/g, function (m, op) {
+    return params[op]
+  })
 }
 
 /**
@@ -75,7 +64,7 @@ function algebraGroup (given, naming) {
     return name
   }
 
-  function secureOperationCreator (ops, opName, arity, resultValidator) {
+  function secureOperationCreator (ops, opName, arity) {
     return function () {
       var args = [].slice.call(arguments, 0, arity)
       var err = !contains.apply(null, args)
@@ -83,23 +72,14 @@ function algebraGroup (given, naming) {
         throw new TypeError(buildError('argumentIsNotInGroup', {op: opName}))
       }
 
-      var result = ops[opName].apply(null, args)
-      if (!resultValidator.validate(result)) {
-        throw new TypeError(buildError(resultValidator.error, {op: opName}))
-      }
-      return result
+      return ops[opName].apply(null, args)
     }
   }
 
   // operators
 
-  var groupValidator = {
-    validate: given.contains,
-    error: 'resultIsNotInGroup'
-  }
-
-  var secureCompositionLaw = secureOperationCreator(given, 'compositionLaw', 2, groupValidator)
-  var secureInversion = secureOperationCreator(given, 'inversion', 1, groupValidator)
+  var secureCompositionLaw = secureOperationCreator(given, 'compositionLaw', 2)
+  var secureInversion = secureOperationCreator(given, 'inversion', 1)
 
   function compositionLaw () {
     return [].slice.call(arguments).reduce(secureCompositionLaw)
