@@ -6,8 +6,11 @@
 
 * [Installation](#installation)
 * [Example](#example)
+    - [Integer additive group](#integer-additive-group)
+    - [Real multiplicative group](#real-multiplicative-group)
 * [API](#api)
 * [License](#license)
+* [Contributors](#contributors)
 
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
@@ -23,7 +26,7 @@ npm install algebra-group
 
 All code in the examples below is intended to be contained into a [single file](https://github.com/fibo/algebra-group/blob/master/test.js).
 
-### Additive group
+### Integer additive group
 
 Create the [Integer](https://en.wikipedia.org/wiki/Integer) additive group.
 
@@ -85,15 +88,17 @@ Z.subtraction(5, 1, 1, 1, 1, 1) // 0
 Z.equality(Z.subtraction(2, 2), Z.zero) // true
 ```
 
-### Multiplicative group
+### `R\{0}` multiplicative group
 
-Create R, the group of [Real numbers](https://en.wikipedia.org/wiki/Real_number) with multiplication as composition law.
+Consider `R\{0}`, the set of [Real numbers][2] minus 0, with multiplication as composition law.
+It is necessary to remove 0, otherwise there is an element which inverse does
+not belong to the group, which breaks [group laws][3].
 It makes sense to customize group props, which defaults to additive group naming.
 
 ```javascript
-function isReal (n) {
+function isRealAndNotZero (n) {
   // NaN, Infinity and -Infinity are not allowed
-  return (typeof n === 'number') && isFinite(n)
+  return (typeof n === 'number') && (n !== 0) && isFinite(n)
 }
 
 function multiplication (a, b) { return a * b }
@@ -103,7 +108,7 @@ function inversion (a) { return 1 / a }
 // Create Real multiplicative group a.k.a (R, *).
 var R = algebraGroup({
   identity: 1,
-  contains: isReal,
+  contains: isRealAndNotZero,
   equality: equality,
   compositionLaw : multiplication,
   inversion: inversion
@@ -127,13 +132,37 @@ You get a group object with *one* identity and the following group operators:
 
 ```javascript
 R.contains(10) // true
-R.contains(Math.PI, Math.E, 0, 1.7, -100) // true
+R.contains(Math.PI, Math.E, 1.7, -100) // true
 R.notContains(Infinity) // true
 
 R.inversion(2) // 0.5
 
 // 2 * 3 * 5 = 30 = 60 / 2
 R.equality(R.multiplication(2, 3, 5), R.division(60, 2)) // true
+```
+
+### R+ multiplicative group
+
+Create the multiplicative group of positive real numbers `(0,∞)`.
+It is a well defined group, since
+
+* it has an indentity
+* it is close respect to its composition law
+
+```
+var positiveReals = algebraGroup({
+  identity: 1,
+  contains: function (a) { return a > 0},
+  equality: equality,
+  compositionLaw: multiplication,
+  inversion: inversion
+}, {
+  compositionLaw: 'mul',
+  identity: 'one',
+  inverseCompositionLaw: 'div',
+  inversion: 'inv'
+})
+
 ```
 
 ## API
@@ -169,5 +198,11 @@ An object exposing the following error messages:
 
 [MIT](http://g14n.info/mit-license/)
 
+## Contributors
+
+* [fibo](https//github.com/fibo)
+* [xgbuils](https//github.com/xgbuils)
+
   [1]: https://en.wikipedia.org/wiki/Group_(mathematics) "Group"
   [2]: https://en.wikipedia.org/wiki/Real_number "Real number"
+  [3]: https://en.wikipedia.org/wiki/Group_(mathematics)#Definition "Group laws"

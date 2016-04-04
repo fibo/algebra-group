@@ -42,8 +42,9 @@ test('Integer additive group', function (t) {
   t.ok(Z.equality(Z.subtraction(2, 2), Z.zero))
 })
 
-function isReal (n) {
-  return (typeof n === 'number') && isFinite(n)
+function isRealAndNotZero (n) {
+  // NaN, Infinity and -Infinity are not allowed
+  return (typeof n === 'number') && (n !== 0) && isFinite(n)
 }
 
 function multiplication (a, b) { return a * b }
@@ -52,7 +53,7 @@ function inversion (a) { return 1 / a }
 
 var R = algebraGroup({
   identity: 1,
-  contains: isReal,
+  contains: isRealAndNotZero,
   equality: equality,
   compositionLaw: multiplication,
   inversion: inversion
@@ -63,11 +64,11 @@ var R = algebraGroup({
   inversion: 'inversion'
 })
 
-test('Real multiplicative group', function (t) {
+test('R-{0} multiplicative group', function (t) {
   t.plan(5)
 
   t.ok(R.contains(10))
-  t.ok(R.contains(Math.PI, Math.E, 0, 1.7, -100))
+  t.ok(R.contains(Math.PI, Math.E, 1.7, -100))
   t.ok(R.notContains(Infinity))
 
   t.equal(R.inversion(2), 0.5)
@@ -75,7 +76,7 @@ test('Real multiplicative group', function (t) {
   t.ok(R.equality(R.multiplication(2, 3, 5), R.division(60, 2)))
 })
 
-function inRange (a, b) {
+function leftOpenInterval (a, b) {
   return function (n) {
     return n > a && n <= b
   }
@@ -87,54 +88,39 @@ test('exceptions in sets that are not groups', function (t) {
   t.throws(function () {
     algebraGroup({
       identity: 2,
-      contains: inRange(0, 1),
+      contains: leftOpenInterval(0, 1),
       equality: equality,
       compositionLaw: multiplication,
       inversion: inversion
-    }, {
-      compositionLaw: 'multiplication',
-      identity: 'one',
-      inverseCompositionLaw: 'division',
-      inversion: 'inversion'
     })
-  }, new RegExp('algebra-group: "identity" must be contained in group set'))
+  }, new RegExp(error.identityIsNotInGroup))
 
   t.throws(function () {
     algebraGroup({
       identity: 2,
-      contains: isReal,
+      contains: isRealAndNotZero,
       equality: equality,
       compositionLaw: multiplication,
       inversion: inversion
-    }, {
-      compositionLaw: 'multiplication',
-      identity: 'one',
-      inverseCompositionLaw: 'division',
-      inversion: 'inversion'
     })
   }, new RegExp(error.identityIsNotNeutral))
 
   t.throws(function () {
     algebraGroup({
       identity: 1,
-      contains: isReal,
+      contains: isRealAndNotZero,
       equality: function (a, b) {
         return a === b ? 'fizz' : 'buzz'
       },
       compositionLaw: multiplication,
       inversion: inversion
-    }, {
-      compositionLaw: 'multiplication',
-      identity: 'one',
-      inverseCompositionLaw: 'division',
-      inversion: 'inversion'
     })
   }, new RegExp(error.equalityIsNotReflexive))
 })
 
 var RfromZeroToOne = algebraGroup({
   identity: 1,
-  contains: inRange(0, 1),
+  contains: leftOpenInterval(0, 1),
   equality: equality,
   compositionLaw: multiplication,
   inversion: inversion

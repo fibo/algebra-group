@@ -1,4 +1,5 @@
 var no = require('not-defined')
+var staticProps = require('static-props')
 
 var pkg = require('./package.json')
 
@@ -135,7 +136,7 @@ function algebraGroup (given, naming) {
     throw new TypeError(error.identityIsNotNeutral)
   }
 
-  // Check that e===e.
+  // Check that e=e.
   if (given.equality(e, e) !== true) {
     throw new TypeError(error.equalityIsNotReflexive)
   }
@@ -145,6 +146,6 @@ function algebraGroup (given, naming) {
   return group
 }
 
-algebraGroup.error = error
+staticProps(algebraGroup)({error: error})
 
 module.exports = algebraGroup
