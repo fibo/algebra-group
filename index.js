@@ -11,12 +11,14 @@ function msg (str) {
   return pkg.name + ': ' + str
 }
 
-var error = {
+var error = {}
+
+staticProps(error)({
   argumentIsNotInGroup: msg('argument is not contained in group set'),
   equalityIsNotReflexive: msg('"equality" is not reflexive'),
   identityIsNotInGroup: msg('"identity" must be contained in group set'),
   identityIsNotNeutral: msg('"identity" is not neutral')
-}
+})
 
 /**
  * given an algebra group structure
@@ -40,8 +42,6 @@ var error = {
  */
 
 function algebraGroup (given, naming) {
-  var group = {}
-
   if (no(given)) given = {}
   if (no(naming)) naming = {}
 
@@ -116,16 +116,13 @@ function algebraGroup (given, naming) {
     return secureCompositionLaw(a, rest.map(secureInversion).reduce(secureCompositionLaw))
   }
 
-  group[prop('contains')] = contains
-  group[prop('notContains')] = notContains
-  group[prop('compositionLaw')] = compositionLaw
-  group[prop('inversion')] = secureInversion
-  group[prop('inverseCompositionLaw')] = inverseCompositionLaw
-  group[prop('equality')] = given.equality
-  group[prop('disequality')] = disequality
-
   // identity element
   var e = given.identity
+
+  // Check that e=e.
+  if (given.equality(e, e) !== true) {
+    throw new TypeError(error.equalityIsNotReflexive)
+  }
 
   if (!given.contains(e)) {
     throw new TypeError(error.identityIsNotInGroup)
@@ -136,12 +133,22 @@ function algebraGroup (given, naming) {
     throw new TypeError(error.identityIsNotNeutral)
   }
 
-  // Check that e=e.
-  if (given.equality(e, e) !== true) {
-    throw new TypeError(error.equalityIsNotReflexive)
-  }
+  var definition = {}
 
-  group[prop('identity')] = e
+  definition[prop('identity')] = e
+
+  definition[prop('contains')] = contains
+  definition[prop('notContains')] = notContains
+  definition[prop('compositionLaw')] = compositionLaw
+  definition[prop('inversion')] = secureInversion
+  definition[prop('inverseCompositionLaw')] = inverseCompositionLaw
+  definition[prop('equality')] = given.equality
+  definition[prop('disequality')] = disequality
+
+  var group = {}
+
+  // Add immutable props to group.
+  staticProps(group)(definition)
 
   return group
 }

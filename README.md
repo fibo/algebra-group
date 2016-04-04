@@ -7,7 +7,8 @@
 * [Installation](#installation)
 * [Example](#example)
     - [Integer additive group](#integer-additive-group)
-    - [Real multiplicative group](#real-multiplicative-group)
+    - [`R\{0}` multiplicative group](#r0-multiplicative-group)
+    - [`R+` multiplicative group](#r-multiplicative-group)
 * [API](#api)
 * [License](#license)
 * [Contributors](#contributors)
@@ -91,8 +92,10 @@ Z.equality(Z.subtraction(2, 2), Z.zero) // true
 ### `R\{0}` multiplicative group
 
 Consider `R\{0}`, the set of [Real numbers][2] minus 0, with multiplication as composition law.
+
 It is necessary to remove 0, otherwise there is an element which inverse does
 not belong to the group, which breaks [group laws][3].
+
 It makes sense to customize group props, which defaults to additive group naming.
 
 ```javascript
@@ -106,6 +109,7 @@ function multiplication (a, b) { return a * b }
 function inversion (a) { return 1 / a }
 
 // Create Real multiplicative group a.k.a (R, *).
+
 var R = algebraGroup({
   identity: 1,
   contains: isRealAndNotZero,
@@ -141,28 +145,43 @@ R.inversion(2) // 0.5
 R.equality(R.multiplication(2, 3, 5), R.division(60, 2)) // true
 ```
 
-### R+ multiplicative group
+### `R+` multiplicative group
 
 Create the multiplicative group of positive real numbers `(0,∞)`.
+
 It is a well defined group, since
 
 * it has an indentity
 * it is close respect to its composition law
+* for every element, its inverse belongs to the set
 
-```
-var positiveReals = algebraGroup({
+Let's customize group props, with a shorter naming.
+
+```javascript
+function isRealAndPositive (n) {
+  // NaN, Infinity are not allowed
+  return (typeof n === 'number') && (n > 0) && isFinite(n)
+}
+
+var Rp = algebraGroup({
   identity: 1,
-  contains: function (a) { return a > 0},
+  contains: isRealAndPositive,
   equality: equality,
   compositionLaw: multiplication,
   inversion: inversion
 }, {
   compositionLaw: 'mul',
+  equality: 'eq',
   identity: 'one',
   inverseCompositionLaw: 'div',
   inversion: 'inv'
 })
+```
 
+```javascript
+Rp.contains(Math.PI) // true
+Rp.notContains(-1) // true
+Rp.eq(Rp.inv(4), Rp.div(Rp.one, 4)) // true
 ```
 
 ## API
@@ -193,6 +212,45 @@ An object exposing the following error messages:
 * equalityIsNotReflexive
 * identityIsNotInGroup
 * identityIsNotNeutral
+
+For example, the following snippets will throw
+
+```javascript
+// identityIsNotNeutral
+
+algebraGroup({
+  identity: -1,
+  contains: isRealAndPositive,
+  equality: equality,
+  compositionLaw: multiplication,
+  inversion: inversion
+})
+
+// identityIsNotNeutral
+
+algebraGroup({
+  identity: 2,
+  contains: isRealAndNotZero,
+  equality: equality,
+  compositionLaw: multiplication,
+  inversion: inversion
+})
+
+// equalityIsNotReflexive
+
+algebraGroup({
+  identity: 1,
+  contains: isRealAndNotZero,
+  equality: function (a, b) { return a > b }, // not well defined
+  compositionLaw: multiplication,
+  inversion: inversion
+})
+
+// argumentIsNotInGroup
+
+R.inversion(0) // 0 is not in group R\{0}
+Rp.mul(1, 0.1, -1, 0.5) // -1 is not in R+
+```
 
 ## License
 

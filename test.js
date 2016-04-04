@@ -64,7 +64,7 @@ var R = algebraGroup({
   inversion: 'inversion'
 })
 
-test('R-{0} multiplicative group', function (t) {
+test('R\\{0} multiplicative group', function (t) {
   t.plan(5)
 
   t.ok(R.contains(10))
@@ -76,19 +76,40 @@ test('R-{0} multiplicative group', function (t) {
   t.ok(R.equality(R.multiplication(2, 3, 5), R.division(60, 2)))
 })
 
-function leftOpenInterval (a, b) {
-  return function (n) {
-    return n > a && n <= b
-  }
+function isRealAndPositive (n) {
+  // NaN, Infinity are not allowed
+  return (typeof n === 'number') && (n > 0) && isFinite(n)
 }
 
-test('exceptions in sets that are not groups', function (t) {
+var Rp = algebraGroup({
+  identity: 1,
+  contains: isRealAndPositive,
+  equality: equality,
+  compositionLaw: multiplication,
+  inversion: inversion
+}, {
+  compositionLaw: 'mul',
+  equality: 'eq',
+  identity: 'one',
+  inverseCompositionLaw: 'div',
+  inversion: 'inv'
+})
+
+test('R+ multiplicative group', function (t) {
   t.plan(3)
+
+  t.ok(Rp.contains(Math.PI))
+  t.ok(Rp.notContains(-1))
+  t.ok(Rp.eq(Rp.inv(4), Rp.div(Rp.one, 4)))
+})
+
+test('Errors', function (t) {
+  t.plan(5)
 
   t.throws(function () {
     algebraGroup({
-      identity: 2,
-      contains: leftOpenInterval(0, 1),
+      identity: -1,
+      contains: isRealAndPositive,
       equality: equality,
       compositionLaw: multiplication,
       inversion: inversion
@@ -109,51 +130,17 @@ test('exceptions in sets that are not groups', function (t) {
     algebraGroup({
       identity: 1,
       contains: isRealAndNotZero,
-      equality: function (a, b) {
-        return a === b ? 'fizz' : 'buzz'
-      },
+      equality: function (a, b) { return a > b }, // not well defined
       compositionLaw: multiplication,
       inversion: inversion
     })
   }, new RegExp(error.equalityIsNotReflexive))
-})
-
-var RfromZeroToOne = algebraGroup({
-  identity: 1,
-  contains: leftOpenInterval(0, 1),
-  equality: equality,
-  compositionLaw: multiplication,
-  inversion: inversion
-}, {
-  compositionLaw: 'multiplication',
-  identity: 'one',
-  inverseCompositionLaw: 'division',
-  inversion: 'inversion'
-})
-
-test('Argument exceptions in (0,1] multiplicative group', function (t) {
-  t.plan(8)
-
-  t.notOk(RfromZeroToOne.contains(10), 'value greater than 1 is not contained in group')
-  t.ok(RfromZeroToOne.contains(0.1, 1, 0.0001, 0.33), 'values between 0 and 1 are contained in group')
-  t.ok(RfromZeroToOne.notContains(-Infinity), 'value less than or equal to 0 is not contained in group')
-  t.notOk(RfromZeroToOne.notContains(0.8), 'notContains returns false with 0.8 argument')
 
   t.throws(function () {
-    RfromZeroToOne.inversion(0)
+    R.inversion(0) // 0 is not in group R\{0}
   }, new RegExp(error.argumentIsNotInGroup))
 
   t.throws(function () {
-    RfromZeroToOne.multiplication(1, 0.1, 1.2, 0.5)
-  }, new RegExp(error.argumentIsNotInGroup))
-
-  // Derivated operations:
-
-  t.throws(function () {
-    RfromZeroToOne.division(1, 1, 1, 0)
-  }, new RegExp(error.argumentIsNotInGroup))
-
-  t.throws(function () {
-    RfromZeroToOne.division(0, 1, 1, 1)
+    Rp.mul(1, 0.1, -1, 0.5) // -1 is not in R+
   }, new RegExp(error.argumentIsNotInGroup))
 })
