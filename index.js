@@ -151,6 +151,6 @@ function algebraGroup (given, naming) {
   return group
 }
 
-staticProps(algebraGroup)({error: error})
+staticProps(algebraGroup)({ error: error })
 
 module.exports = algebraGroup

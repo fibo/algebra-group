@@ -182,7 +182,12 @@ var Rp = algebraGroup({
 Rp.contains(Math.PI) // true
 Rp.notContains(-1) // true
 Rp.eq(Rp.inv(4), Rp.div(Rp.one, 4)) // true
+Rp.mul(2, 4) // 8
 ```
+
+### Functions over R∞
+
+**TODO** see tests
 
 ## API
 

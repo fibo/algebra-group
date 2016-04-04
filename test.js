@@ -96,11 +96,55 @@ var Rp = algebraGroup({
 })
 
 test('R+ multiplicative group', function (t) {
-  t.plan(3)
+  t.plan(4)
 
   t.ok(Rp.contains(Math.PI))
   t.ok(Rp.notContains(-1))
   t.ok(Rp.eq(Rp.inv(4), Rp.div(Rp.one, 4)))
+  t.equal(Rp.mul(2, 4), 8)
+})
+
+function isFunctionOverR (fn) {
+  return (typeof fn === 'function') && (typeof fn(Math.random()) === 'number')
+}
+
+function fnComposition (a, b) {
+  return function (x) {
+    return a(b(x))
+  }
+}
+
+function fnInversion (fn) {
+  return function (x) {
+    return 1 / fn(x)
+  }
+}
+
+// This is not possible for current computers: two functions are equal if for every real
+// number their values are equal.
+function fnEquality (a, b) {
+  var x = Math.random()
+
+  return a(x) === b(x)
+}
+
+var F = algebraGroup({
+  identity: function (x) { return x },
+  contains: isFunctionOverR,
+  equality: fnEquality,
+  compositionLaw: fnComposition,
+  inversion: fnInversion
+}, {
+  compositionLaw: 'o',
+  equality: 'eq',
+  identity: 'id',
+  inversion: 'inv'
+})
+
+test('Functions over R∞', function (t) {
+  t.plan(1)
+
+  t.ok(F.eq(F.o(Math.cos, F.id), Math.cos))
 })
 
 test('Errors', function (t) {
