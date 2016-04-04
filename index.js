@@ -33,6 +33,7 @@ staticProps(error)({
  * @param {String} [naming.identity=zero]
  * @param {String} [naming.contains=contains]
  * @param {String} [naming.equality=equality]
+ * @param {String} [naming.disequality=disequality]
  * @param {String} [naming.compositionLaw=addition]
  * @param {String} [naming.inversion=negation]
  * @param {String} [naming.inverseCompositionLaw=subtraction]
@@ -49,9 +50,13 @@ function algebraGroup (given, naming) {
 
   var defaultNaming = {
     compositionLaw: 'addition',
+    contains: 'contains',
+    disequality: 'disequality',
+    equality: 'equality',
     identity: 'zero',
     inverseCompositionLaw: 'subtraction',
-    inversion: 'negation'
+    inversion: 'negation',
+    notContains: 'notContains'
   }
 
   /**
@@ -63,15 +68,8 @@ function algebraGroup (given, naming) {
    */
 
   function prop (name) {
-    if (typeof naming[name] === 'string') {
-      return naming[name]
-    }
-
-    if (typeof defaultNaming[name] === 'string') {
-      return defaultNaming[name]
-    }
-
-    return name
+    if (typeof naming[name] === 'string') return naming[name]
+    else return defaultNaming[name]
   }
 
   function secureOperationCreator (ops, opName, arity) {
