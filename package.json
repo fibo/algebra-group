@@ -34,5 +34,8 @@
     "pre-commit": "^1.1.2",
     "standard": "^6.0.4",
     "tape": "^4.2.0"
+  },
+  "dependencies": {
+    "not-defined": "^1.0.0"
   }
 }

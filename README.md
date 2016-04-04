@@ -6,6 +6,7 @@
 
 * [Installation](#installation)
 * [Example](#example)
+* [API](#api)
 * [License](#license)
 
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
@@ -134,6 +135,35 @@ R.inversion(2) // 0.5
 // 2 * 3 * 5 = 30 = 60 / 2
 R.equality(R.multiplication(2, 3, 5), R.division(60, 2)) // true
 ```
+
+## API
+
+### `group(identity, operator)`
+
+* **@param** `{Object}`   given identity and operators
+* **@param** `{*}`        given.identity a.k.a. neutral element
+* **@param** `{Function}` given.contains
+* **@param** `{Function}` given.equality
+* **@param** `{Function}` given.compositionLaw
+* **@param** `{Function}` given.inversion
+* **@param** `{Object}` [naming]
+* **@param** `{String}` [naming.identity=zero]
+* **@param** `{String}` [naming.contains=contains]
+* **@param** `{String}` [naming.equality=equality]
+* **@param** `{String}` [naming.compositionLaw=addition]
+* **@param** `{String}` [naming.inversion=negation]
+* **@param** `{String}` [naming.inverseCompositionLaw=subtraction]
+* **@param** `{String}` [naming.notContains=notContains]
+* **@returns** `{Object}` groups
+
+### `group.error`
+
+An object exposing the following error messages:
+
+* argumentIsNotInGroup
+* equalityIsNotReflexive
+* identityIsNotInGroup
+* identityIsNotNeutral
 
 ## License
 

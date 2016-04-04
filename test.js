@@ -1,7 +1,7 @@
 var algebraGroup = require('./index')
 var test = require('tape')
 
-var zero = 0
+var error = algebraGroup.error
 
 function isInteger (n) {
   return (typeof n === 'number') && isFinite(n) && (n % 1 === 0)
@@ -14,7 +14,7 @@ function addition (a, b) { return a + b }
 function negation (a) { return -a }
 
 var Z = algebraGroup({
-  identity: zero,
+  identity: 0,
   contains: isInteger,
   equality: equality,
   compositionLaw: addition,
@@ -112,7 +112,7 @@ test('exceptions in sets that are not groups', function (t) {
       inverseCompositionLaw: 'division',
       inversion: 'inversion'
     })
-  }, new RegExp('algebra-group: "identity" is not neutral'))
+  }, new RegExp(error.identityIsNotNeutral))
 
   t.throws(function () {
     algebraGroup({
@@ -129,7 +129,7 @@ test('exceptions in sets that are not groups', function (t) {
       inverseCompositionLaw: 'division',
       inversion: 'inversion'
     })
-  }, new RegExp('algebra-group: "equality" must return boolean value'))
+  }, new RegExp(error.equalityIsNotReflexive))
 })
 
 var RfromZeroToOne = algebraGroup({
@@ -155,19 +155,19 @@ test('Argument exceptions in (0,1] multiplicative group', function (t) {
 
   t.throws(function () {
     RfromZeroToOne.inversion(0)
-  }, new RegExp('algebra-group: "inversion" must be called with arguments contained in group set'))
+  }, new RegExp(error.argumentIsNotInGroup))
 
   t.throws(function () {
     RfromZeroToOne.multiplication(1, 0.1, 1.2, 0.5)
-  }, new RegExp('algebra-group: "compositionLaw" must be called with arguments contained in group set'))
+  }, new RegExp(error.argumentIsNotInGroup))
 
   // Derivated operations:
 
   t.throws(function () {
     RfromZeroToOne.division(1, 1, 1, 0)
-  }, new RegExp('algebra-group: "inversion" must be called with arguments contained in group set'))
+  }, new RegExp(error.argumentIsNotInGroup))
 
   t.throws(function () {
     RfromZeroToOne.division(0, 1, 1, 1)
-  }, new RegExp('algebra-group: "compositionLaw" must be called with arguments contained in group set'))
+  }, new RegExp(error.argumentIsNotInGroup))
 })

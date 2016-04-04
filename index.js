@@ -1,14 +1,20 @@
-var error = {
-  argumentIsNotInGroup: 'algebra-group: "${op}" must be called with arguments contained in group set',
-  equalityDoesNotReturnBoolean: 'algebra-group: "equality" must return boolean value',
-  identityIsNotInGroup: 'algebra-group: "identity" must be contained in group set',
-  identityIsNotNeutral: 'algebra-group: "identity" is not neutral'
+var no = require('not-defined')
+
+var pkg = require('./package.json')
+
+/**
+ * Prepend package name to error message
+ */
+
+function msg (str) {
+  return pkg.name + ': ' + str
 }
 
-function buildError (type, params) {
-  return error[type].replace(/\$\{(.*)\}/g, function (m, op) {
-    return params[op]
-  })
+var error = {
+  argumentIsNotInGroup: msg('argument is not contained in group set'),
+  equalityIsNotReflexive: msg('"equality" is not reflexive'),
+  identityIsNotInGroup: msg('"identity" must be contained in group set'),
+  identityIsNotNeutral: msg('"identity" is not neutral')
 }
 
 /**
@@ -35,13 +41,8 @@ function buildError (type, params) {
 function algebraGroup (given, naming) {
   var group = {}
 
-  if (typeof given === 'undefined') {
-    given = {}
-  }
-
-  if (typeof naming === 'undefined') {
-    naming = {}
-  }
+  if (no(given)) given = {}
+  if (no(naming)) naming = {}
 
   // default attribute naming
 
@@ -51,6 +52,14 @@ function algebraGroup (given, naming) {
     inverseCompositionLaw: 'subtraction',
     inversion: 'negation'
   }
+
+  /**
+   * Returns a prop custom name or its default
+   *
+   * @param {String} name
+   *
+   * @returns {String} actualName
+   */
 
   function prop (name) {
     if (typeof naming[name] === 'string') {
@@ -69,7 +78,7 @@ function algebraGroup (given, naming) {
       var args = [].slice.call(arguments, 0, arity)
       var err = !contains.apply(null, args)
       if (err) {
-        throw new TypeError(buildError('argumentIsNotInGroup', {op: opName}))
+        throw new TypeError(error.argumentIsNotInGroup)
       }
 
       return ops[opName].apply(null, args)
@@ -118,22 +127,24 @@ function algebraGroup (given, naming) {
   var e = given.identity
 
   if (!given.contains(e)) {
-    throw new TypeError(buildError('identityIsNotInGroup'))
+    throw new TypeError(error.identityIsNotInGroup)
   }
 
   // Check that e+e=e.
   if (!given.equality(given.compositionLaw(e, e), e)) {
-    throw new TypeError(buildError('identityIsNotNeutral'))
+    throw new TypeError(error.identityIsNotNeutral)
   }
 
   // Check that e===e.
   if (given.equality(e, e) !== true) {
-    throw new TypeError(buildError('equalityDoesNotReturnBoolean'))
+    throw new TypeError(error.equalityIsNotReflexive)
   }
 
   group[prop('identity')] = e
 
   return group
 }
+
+algebraGroup.error = error
 
 module.exports = algebraGroup
