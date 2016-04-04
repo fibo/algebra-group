@@ -2,7 +2,21 @@
 
 > defines an [algebra group][1] structure
 
+**Table Of Contents:**
+
+* [Installation](#installation)
+* [Example](#example)
+* [License](#license)
+
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
+
+## Installation
+
+With [npm](https://npmjs.org/) do
+
+```bash
+npm install algebra-group
+```
 
 ## Example
 
@@ -12,7 +26,7 @@ All code in the examples below is intended to be contained into a [single file](
 
 Create the [Integer](https://en.wikipedia.org/wiki/Integer) additive group.
 
-```
+```javascript
 var algebraGroup = require('algebra-group')
 
 // Define identity element.
@@ -41,6 +55,7 @@ var Z = algebraGroup({
 ```
 
 You get a group object with *zero* identity and the following group operators:
+
 * contains
 * notContains
 * equality
@@ -49,7 +64,7 @@ You get a group object with *zero* identity and the following group operators:
 * subtraction
 * negation
 
-```
+```javascript
 Z.contains(2) // true
 Z.contains(2.5) // false
 Z.contains('xxx') // false
@@ -74,7 +89,7 @@ Z.equality(Z.subtraction(2, 2), Z.zero) // true
 Create R, the group of [Real numbers](https://en.wikipedia.org/wiki/Real_number) with multiplication as composition law.
 It makes sense to customize group props, which defaults to additive group naming.
 
-```
+```javascript
 function isReal (n) {
   // NaN, Infinity and -Infinity are not allowed
   return (typeof n === 'number') && isFinite(n)
@@ -97,10 +112,10 @@ var R = algebraGroup({
   inverseCompositionLaw: 'division',
   inversion: 'inversion'
 })
-
 ```
 
 You get a group object with *one* identity and the following group operators:
+
 * contains
 * notContains
 * equality
@@ -109,15 +124,20 @@ You get a group object with *one* identity and the following group operators:
 * division
 * inversion
 
-```
+```javascript
 R.contains(10) // true
 R.contains(Math.PI, Math.E, 0, 1.7, -100) // true
 R.notContains(Infinity) // true
 
 R.inversion(2) // 0.5
 
-R.equality(R.multiplication(2, 3, 5), R.division(60, 2)) // true, 2 * 3 * 5 = 30 = 60 / 2
+// 2 * 3 * 5 = 30 = 60 / 2
+R.equality(R.multiplication(2, 3, 5), R.division(60, 2)) // true
 ```
 
-  [1]: https://en.wikipedia.org/wiki/Group_(mathematics) "Group"
+## License
 
+[MIT](http://g14n.info/mit-license/)
+
+  [1]: https://en.wikipedia.org/wiki/Group_(mathematics) "Group"
+  [2]: https://en.wikipedia.org/wiki/Real_number "Real number"
