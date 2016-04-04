@@ -5,7 +5,7 @@
 **Table Of Contents:**
 
 * [Installation](#installation)
-* [Example](#example)
+* [Examples](#examples)
     - [Integer additive group](#integer-additive-group)
     - [`R\{0}` multiplicative group](#r0-multiplicative-group)
     - [`R+` multiplicative group](#r-multiplicative-group)
@@ -23,7 +23,7 @@ With [npm](https://npmjs.org/) do
 npm install algebra-group
 ```
 
-## Example
+## Examples
 
 All code in the examples below is intended to be contained into a [single file](https://github.com/fibo/algebra-group/blob/master/test.js).
 
@@ -216,7 +216,7 @@ An object exposing the following error messages:
 For example, the following snippets will throw
 
 ```javascript
-// identityIsNotNeutral
+// identityIsNotInGroup
 
 algebraGroup({
   identity: -1,

@@ -21,7 +21,7 @@ staticProps(error)({
 })
 
 /**
- * given an algebra group structure
+ * Defines an algebra group structure
  *
  * @param {Object}   given
  * @param {*}        given.identity a.k.a neutral element
