@@ -121,16 +121,19 @@ function fnInversion (fn) {
   }
 }
 
+// Identity function.
+function fnId (x) { return x }
+
 // This is not possible for current computers: two functions are equal if for every real
 // number their values are equal.
 function fnEquality (a, b) {
   var x = Math.random()
 
-  return a(x) === b(x)
+  return (a(x) === b(x)) && (a(-x) === b(-x))
 }
 
 var F = algebraGroup({
-  identity: function (x) { return x },
+  identity: fnId,
   contains: isFunctionOverR,
   equality: fnEquality,
   compositionLaw: fnComposition,
@@ -142,9 +145,17 @@ var F = algebraGroup({
   inversion: 'inv'
 })
 
-test('Functions over R∞', function (t) {
-  t.plan(1)
+function fnConstant (x) {
+  return function () { return x }
+}
 
+test('Functions over R∞', function (t) {
+  t.plan(2)
+
+  var two = fnConstant(2)
+  var halph = fnConstant(0.5)
+
+  t.ok(F.eq(F.inv(two), halph))
   t.ok(F.eq(F.o(Math.cos, F.id), Math.cos))
 })
 
