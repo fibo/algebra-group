@@ -90,6 +90,7 @@ var Rp = algebraGroup({
 }, {
   compositionLaw: 'mul',
   equality: 'eq',
+  disequality: 'ne',
   identity: 'one',
   inverseCompositionLaw: 'div',
   inversion: 'inv'

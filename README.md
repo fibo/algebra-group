@@ -59,7 +59,7 @@ var Z = algebraGroup({
 })
 ```
 
-You get a group object with *zero* identity and the following group operators:
+You get a group object with *zero* as identity and the following group operators:
 
 * contains
 * notContains
@@ -124,7 +124,7 @@ var R = algebraGroup({
 })
 ```
 
-You get a group object with *one* identity and the following group operators:
+You get a group object with *one* as identity and the following group operators:
 
 * contains
 * notContains
@@ -172,11 +172,22 @@ var Rp = algebraGroup({
 }, {
   compositionLaw: 'mul',
   equality: 'eq',
+  disequality: 'ne',
   identity: 'one',
   inverseCompositionLaw: 'div',
   inversion: 'inv'
 })
 ```
+
+You get a group object with *one* identity and the following group operators:
+
+* contains
+* notContains
+* eq
+* ne
+* mul
+* div
+* inv
 
 ```javascript
 Rp.contains(Math.PI) // true
