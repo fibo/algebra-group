@@ -2,6 +2,10 @@
 
 > defines an [algebra group][1] structure
 
+[![NPM version](https://badge.fury.io/js/algebra-group.svg)](http://badge.fury.io/js/algebra-group) [![Build Status](https://travis-ci.org/fibo/algebra-group.svg?branch=master)](https://travis-ci.org/fibo/algebra-group?branch=master) [![Dependency Status](https://gemnasium.com/fibo/algebra-group.svg)](https://gemnasium.com/fibo/algebra-group)
+
+[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
+
 **Table Of Contents:**
 
 * [Installation](#installation)
@@ -9,11 +13,10 @@
     - [Integer additive group](#integer-additive-group)
     - [`R\{0}` multiplicative group](#r0-multiplicative-group)
     - [`R+` multiplicative group](#r-multiplicative-group)
+    - [Functions over R∞](#functions-over-r)
 * [API](#api)
 * [License](#license)
 * [Contributors](#contributors)
-
-[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
 ## Installation
 
