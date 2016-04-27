@@ -2,7 +2,7 @@
 
 > defines an [algebra group][1] structure
 
-[![NPM version](https://badge.fury.io/js/algebra-group.svg)](http://badge.fury.io/js/algebra-group) [![Build Status](https://travis-ci.org/fibo/algebra-group.svg?branch=master)](https://travis-ci.org/fibo/algebra-group?branch=master) [![Dependency Status](https://gemnasium.com/fibo/algebra-group.svg)](https://gemnasium.com/fibo/algebra-group)
+[![NPM version](https://badge.fury.io/js/algebra-group.svg)](http://badge.fury.io/js/algebra-group) [![Build Status](https://travis-ci.org/fibo/algebra-group.svg?branch=master)](https://travis-ci.org/fibo/algebra-group?branch=master) [![Dependency Status](https://david-dm.org/fibo/algebra-group.svg)](https://david-dm.org/fibo/algebra-group)
 
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
