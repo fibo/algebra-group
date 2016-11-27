@@ -222,12 +222,12 @@ Rp.mul(2, 4) // 8
 
 An object exposing the following error messages:
 
-* [argumentIsNotInGroup](#argumentIsNotInGroup)
-* [equalityIsNotReflexive](#equalityIsNotReflexive)
-* [identityIsNotInGroup](#identityIsNotInGroup)
-* [identityIsNotNeutral](#identityIsNotNeutral)
+* [argumentIsNotInGroup](#argumentisnotingroup)
+* [equalityIsNotReflexive](#equalityisnotreflexive)
+* [identityIsNotInGroup](#identityisnotingroup)
+* [identityIsNotNeutral](#identityisnotneutral)
 
-For example, the following snippets will throw
+For example, the following snippets will throw.
 
 #### argumentIsNotInGroup
 
