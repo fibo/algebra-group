@@ -1,7 +1,7 @@
 {
   "name": "algebra-group",
   "description": "defines and algebra group structure",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "homepage": "http://npm.im/algebra-group",
   "author": {
     "name": "Gianluca Casati",
