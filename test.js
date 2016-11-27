@@ -105,62 +105,26 @@ test('R+ multiplicative group', function (t) {
   t.equal(Rp.mul(2, 4), 8)
 })
 
-function isFunctionOverR (fn) {
-  return (typeof fn === 'function') && (typeof fn(Math.random()) === 'number')
-}
-
-function fnComposition (a, b) {
-  return function (x) {
-    return a(b(x))
-  }
-}
-
-function fnInversion (fn) {
-  return function (x) {
-    return 1 / fn(x)
-  }
-}
-
-// Identity function.
-function fnId (x) { return x }
-
-// This is not possible for current computers: two functions are equal if for every real
-// number their values are equal.
-function fnEquality (a, b) {
-  var x = Math.random()
-
-  return (a(x) === b(x)) && (a(-x) === b(-x))
-}
-
-var F = algebraGroup({
-  identity: fnId,
-  contains: isFunctionOverR,
-  equality: fnEquality,
-  compositionLaw: fnComposition,
-  inversion: fnInversion
-}, {
-  compositionLaw: 'o',
-  equality: 'eq',
-  identity: 'id',
-  inversion: 'inv'
-})
-
-function fnConstant (x) {
-  return function () { return x }
-}
-
-test('Functions over R∞', function (t) {
-  t.plan(2)
-
-  var two = fnConstant(2)
-  var halph = fnConstant(0.5)
-
-  t.ok(F.eq(F.inv(two), halph))
-  t.ok(F.eq(F.o(Math.cos, F.id), Math.cos))
-})
-
 test('Errors', function (t) {
   t.plan(5)
+
+  t.throws(function () {
+    R.inversion(0) // 0 is not in group R\{0}
+  }, new RegExp(error.argumentIsNotInGroup))
+
+  t.throws(function () {
+    Rp.mul(1, 0.1, -1, 0.5) // -1 is not in R+
+  }, new RegExp(error.argumentIsNotInGroup))
+
+  t.throws(function () {
+    algebraGroup({
+      identity: 1,
+      contains: isRealAndNotZero,
+      equality: function (a, b) { return a > b }, // not well defined
+      compositionLaw: multiplication,
+      inversion: inversion
+    })
+  }, new RegExp(error.equalityIsNotReflexive))
 
   t.throws(function () {
     algebraGroup({
@@ -181,22 +145,4 @@ test('Errors', function (t) {
       inversion: inversion
     })
   }, new RegExp(error.identityIsNotNeutral))
-
-  t.throws(function () {
-    algebraGroup({
-      identity: 1,
-      contains: isRealAndNotZero,
-      equality: function (a, b) { return a > b }, // not well defined
-      compositionLaw: multiplication,
-      inversion: inversion
-    })
-  }, new RegExp(error.equalityIsNotReflexive))
-
-  t.throws(function () {
-    R.inversion(0) // 0 is not in group R\{0}
-  }, new RegExp(error.argumentIsNotInGroup))
-
-  t.throws(function () {
-    Rp.mul(1, 0.1, -1, 0.5) // -1 is not in R+
-  }, new RegExp(error.argumentIsNotInGroup))
 })

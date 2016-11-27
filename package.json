@@ -31,12 +31,12 @@
     "check-deps"
   ],
   "devDependencies": {
-    "pre-commit": "^1.1.2",
-    "standard": "^6.0.4",
-    "tape": "^4.2.0"
+    "pre-commit": "1.x",
+    "standard": "8.x",
+    "tape": "4.x"
   },
   "dependencies": {
-    "not-defined": "^1.0.0",
-    "static-props": "^0.2.0"
+    "not-defined": "1.x",
+    "static-props": "1.x"
   }
 }

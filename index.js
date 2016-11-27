@@ -1,7 +1,7 @@
-var no = require('not-defined')
-var staticProps = require('static-props')
+const no = require('not-defined')
+const staticProps = require('static-props')
 
-var pkg = require('./package.json')
+const pkg = require('./package.json')
 
 /**
  * Prepend package name to error message
@@ -48,7 +48,7 @@ function algebraGroup (given, naming) {
 
   // default attribute naming
 
-  var defaultNaming = {
+  const defaultNaming = {
     compositionLaw: 'addition',
     contains: 'contains',
     disequality: 'disequality',
@@ -72,22 +72,32 @@ function algebraGroup (given, naming) {
     else return defaultNaming[name]
   }
 
-  function secureOperationCreator (ops, opName, arity) {
+  /**
+   * Wraps operator by checking if arguments are contained in group.
+   *
+   * @param {Object} given operators
+   * @param {String} operator name
+   * @param {Number} arity
+   *
+   * @returns {Function} internalOperator
+   */
+
+  function internalOperator (given, operator, arity) {
     return function () {
-      var args = [].slice.call(arguments, 0, arity)
-      var err = !contains.apply(null, args)
-      if (err) {
+      const args = [].slice.call(arguments, 0, arity)
+
+      if (contains.apply(null, args)) {
+        return given[operator].apply(null, args)
+      } else {
         throw new TypeError(error.argumentIsNotInGroup)
       }
-
-      return ops[opName].apply(null, args)
     }
   }
 
   // operators
 
-  var secureCompositionLaw = secureOperationCreator(given, 'compositionLaw', 2)
-  var secureInversion = secureOperationCreator(given, 'inversion', 1)
+  var secureCompositionLaw = internalOperator(given, 'compositionLaw', 2)
+  var secureInversion = internalOperator(given, 'inversion', 1)
 
   function compositionLaw () {
     return [].slice.call(arguments).reduce(secureCompositionLaw)
@@ -135,13 +145,14 @@ function algebraGroup (given, naming) {
 
   definition[prop('identity')] = e
 
-  definition[prop('contains')] = contains
-  definition[prop('notContains')] = notContains
-  definition[prop('compositionLaw')] = compositionLaw
-  definition[prop('inversion')] = secureInversion
-  definition[prop('inverseCompositionLaw')] = inverseCompositionLaw
-  definition[prop('equality')] = given.equality
-  definition[prop('disequality')] = disequality
+  // Wrap functions otherwise staticProps will treat them as getters.
+  definition[prop('contains')] = () => contains
+  definition[prop('notContains')] = () => notContains
+  definition[prop('compositionLaw')] = () => compositionLaw
+  definition[prop('inversion')] = () => secureInversion
+  definition[prop('inverseCompositionLaw')] = () => inverseCompositionLaw
+  definition[prop('equality')] = () => given.equality
+  definition[prop('disequality')] = () => disequality
 
   var group = {}
 
@@ -151,6 +162,6 @@ function algebraGroup (given, naming) {
   return group
 }
 
-staticProps(algebraGroup)({ error: error })
+staticProps(algebraGroup)({ error })
 
 module.exports = algebraGroup

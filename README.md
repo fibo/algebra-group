@@ -13,7 +13,6 @@
     - [Integer additive group](#integer-additive-group)
     - [`R\{0}` multiplicative group](#r0-multiplicative-group)
     - [`R+` multiplicative group](#r-multiplicative-group)
-    - [Functions over R∞](#functions-over-r)
 * [API](#api)
 * [License](#license)
 * [Contributors](#contributors)
@@ -199,10 +198,6 @@ Rp.eq(Rp.inv(4), Rp.div(Rp.one, 4)) // true
 Rp.mul(2, 4) // 8
 ```
 
-### Functions over R∞
-
-**TODO** see tests
-
 ## API
 
 ### `group(identity, operator)`
@@ -227,36 +222,23 @@ Rp.mul(2, 4) // 8
 
 An object exposing the following error messages:
 
-* argumentIsNotInGroup
-* equalityIsNotReflexive
-* identityIsNotInGroup
-* identityIsNotNeutral
+* [argumentIsNotInGroup](#argumentIsNotInGroup)
+* [equalityIsNotReflexive](#equalityIsNotReflexive)
+* [identityIsNotInGroup](#identityIsNotInGroup)
+* [identityIsNotNeutral](#identityIsNotNeutral)
 
 For example, the following snippets will throw
 
+#### argumentIsNotInGroup
+
 ```javascript
-// identityIsNotInGroup
+R.inversion(0) // 0 is not in group R\{0}
+Rp.mul(1, 0.1, -1, 0.5) // -1 is not in R+
+```
 
-algebraGroup({
-  identity: -1,
-  contains: isRealAndPositive,
-  equality: equality,
-  compositionLaw: multiplication,
-  inversion: inversion
-})
+#### equalityIsNotReflexive
 
-// identityIsNotNeutral
-
-algebraGroup({
-  identity: 2,
-  contains: isRealAndNotZero,
-  equality: equality,
-  compositionLaw: multiplication,
-  inversion: inversion
-})
-
-// equalityIsNotReflexive
-
+```javascript
 algebraGroup({
   identity: 1,
   contains: isRealAndNotZero,
@@ -264,11 +246,30 @@ algebraGroup({
   compositionLaw: multiplication,
   inversion: inversion
 })
+```
 
-// argumentIsNotInGroup
+#### identityIsNotInGroup
 
-R.inversion(0) // 0 is not in group R\{0}
-Rp.mul(1, 0.1, -1, 0.5) // -1 is not in R+
+```javascript
+algebraGroup({
+  identity: -1,
+  contains: isRealAndPositive,
+  equality: equality,
+  compositionLaw: multiplication,
+  inversion: inversion
+})
+```
+
+#### identityIsNotNeutral
+
+```javascript
+algebraGroup({
+  identity: 2,
+  contains: isRealAndNotZero,
+  equality: equality,
+  compositionLaw: multiplication,
+  inversion: inversion
+})
 ```
 
 ## License
@@ -277,9 +278,9 @@ Rp.mul(1, 0.1, -1, 0.5) // -1 is not in R+
 
 ## Contributors
 
-* [fibo](https//github.com/fibo)
-* [xgbuils](https//github.com/xgbuils)
+* [fibo](https://github.com/fibo)
+* [xgbuils](https://github.com/xgbuils)
 
-  [1]: https://en.wikipedia.org/wiki/Group_(mathematics) "Group"
-  [2]: https://en.wikipedia.org/wiki/Real_number "Real number"
-  [3]: https://en.wikipedia.org/wiki/Group_(mathematics)#Definition "Group laws"
+[1]: https://en.wikipedia.org/wiki/Group_(mathematics) "Group"
+[2]: https://en.wikipedia.org/wiki/Real_number "Real number"
+[3]: https://en.wikipedia.org/wiki/Group_(mathematics)#Definition "Group laws"
