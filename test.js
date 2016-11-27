@@ -1,4 +1,4 @@
-const algebraGroup = require('./index')
+const algebraGroup = require('algebra-group')
 const test = require('tape')
 
 const error = algebraGroup.error
