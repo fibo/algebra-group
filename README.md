@@ -6,7 +6,7 @@
 
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
-**Table Of Contents:**
+## Table Of Contents
 
 * [Installation](#installation)
 * [Examples](#examples)
@@ -34,10 +34,10 @@ All code in the examples below is intended to be contained into a [single file](
 Create the [Integer](https://en.wikipedia.org/wiki/Integer) additive group.
 
 ```javascript
-var algebraGroup = require('algebra-group')
+const algebraGroup = require('algebra-group')
 
 // Define identity element.
-var zero = 0
+const zero = 0
 
 // Define operators.
 function isInteger (a) {
@@ -52,7 +52,7 @@ function addition (a, b) { return a + b }
 function negation (a) { return -a }
 
 // Create Integer additive group a.k.a (Z, +).
-var Z = algebraGroup({
+const Z = algebraGroup({
   identity: zero,
   contains: isInteger,
   equality: equality,
@@ -112,7 +112,7 @@ function inversion (a) { return 1 / a }
 
 // Create Real multiplicative group a.k.a (R, *).
 
-var R = algebraGroup({
+const R = algebraGroup({
   identity: 1,
   contains: isRealAndNotZero,
   equality: equality,
@@ -165,7 +165,7 @@ function isRealAndPositive (n) {
   return (typeof n === 'number') && (n > 0) && isFinite(n)
 }
 
-var Rp = algebraGroup({
+const Rp = algebraGroup({
   identity: 1,
   contains: isRealAndPositive,
   equality: equality,

@@ -11,7 +11,7 @@ function msg (str) {
   return pkg.name + ': ' + str
 }
 
-var error = {}
+const error = {}
 
 staticProps(error)({
   argumentIsNotInGroup: msg('argument is not contained in group set'),
@@ -96,15 +96,16 @@ function algebraGroup (given, naming) {
 
   // operators
 
-  var secureCompositionLaw = internalOperator(given, 'compositionLaw', 2)
-  var secureInversion = internalOperator(given, 'inversion', 1)
+  const secureCompositionLaw = internalOperator(given, 'compositionLaw', 2)
+  const secureInversion = internalOperator(given, 'inversion', 1)
 
   function compositionLaw () {
     return [].slice.call(arguments).reduce(secureCompositionLaw)
   }
 
   function contains () {
-    var arg = [].slice.call(arguments)
+    const arg = [].slice.call(arguments)
+
     for (var i in arg) {
       if (!given.contains(arg[i])) {
         return false
@@ -119,13 +120,13 @@ function algebraGroup (given, naming) {
   function disequality (a, b) { return !given.equality(a, b) }
 
   function inverseCompositionLaw (a) {
-    var rest = [].slice.call(arguments, 1)
+    const rest = [].slice.call(arguments, 1)
 
     return secureCompositionLaw(a, rest.map(secureInversion).reduce(secureCompositionLaw))
   }
 
   // identity element
-  var e = given.identity
+  const e = given.identity
 
   // Check that e=e.
   if (given.equality(e, e) !== true) {
@@ -141,7 +142,7 @@ function algebraGroup (given, naming) {
     throw new TypeError(error.identityIsNotNeutral)
   }
 
-  var definition = {}
+  const definition = {}
 
   definition[prop('identity')] = e
 
@@ -154,7 +155,7 @@ function algebraGroup (given, naming) {
   definition[prop('equality')] = () => given.equality
   definition[prop('disequality')] = () => disequality
 
-  var group = {}
+  const group = {}
 
   // Add immutable props to group.
   staticProps(group)(definition)

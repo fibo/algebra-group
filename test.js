@@ -1,7 +1,9 @@
-var algebraGroup = require('./index')
-var test = require('tape')
+const algebraGroup = require('./index')
+const test = require('tape')
 
-var error = algebraGroup.error
+const error = algebraGroup.error
+
+const zero = 0
 
 function isInteger (n) {
   return (typeof n === 'number') && isFinite(n) && (n % 1 === 0)
@@ -13,8 +15,8 @@ function addition (a, b) { return a + b }
 
 function negation (a) { return -a }
 
-var Z = algebraGroup({
-  identity: 0,
+const Z = algebraGroup({
+  identity: zero,
   contains: isInteger,
   equality: equality,
   compositionLaw: addition,
@@ -51,7 +53,7 @@ function multiplication (a, b) { return a * b }
 
 function inversion (a) { return 1 / a }
 
-var R = algebraGroup({
+const R = algebraGroup({
   identity: 1,
   contains: isRealAndNotZero,
   equality: equality,
@@ -81,7 +83,7 @@ function isRealAndPositive (n) {
   return (typeof n === 'number') && (n > 0) && isFinite(n)
 }
 
-var Rp = algebraGroup({
+const Rp = algebraGroup({
   identity: 1,
   contains: isRealAndPositive,
   equality: equality,
