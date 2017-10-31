@@ -11,7 +11,7 @@
   "main": "algebra-group.js",
   "scripts": {
     "check-deps": "npm outdated",
-    "lint": "standard",
+    "lint": "standa",
     "postversion": "git push origin v${npm_package_version}; npm publish; git push origin master",
     "test": "NODE_PATH=. tape test.js"
   },
@@ -31,12 +31,12 @@
     "check-deps"
   ],
   "devDependencies": {
-    "pre-commit": "1.x",
-    "standard": "8.x",
-    "tape": "4.x"
+    "pre-commit": "^1.2.2",
+    "standa": "^1.0.2",
+    "tape": "^4.8.0"
   },
   "dependencies": {
-    "not-defined": "1.x",
-    "static-props": "1.x"
+    "not-defined": "^2.0.1",
+    "static-props": "^1.1.0"
   }
 }
