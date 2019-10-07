@@ -1,7 +1,7 @@
 {
   "name": "algebra-group",
   "description": "defines and algebra group structure",
-  "version": "0.6.2",
+  "version": "1.0.0",
   "homepage": "http://g14n.info/algebra-group",
   "author": {
     "name": "Gianluca Casati",
