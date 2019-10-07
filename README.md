@@ -219,7 +219,7 @@ Rp.mul(2, 4) // 8
 
 ## API
 
-### `group(identity, operator)`
+### `algebraGroup(identity, operator)`
 
 * **@param** `{Object}`   given identity and operators
 * **@param** `{*}`        given.identity a.k.a. neutral element
@@ -237,25 +237,54 @@ Rp.mul(2, 4) // 8
 * **@param** `{String}` [naming.notContains=notContains]
 * **@returns** `{Object}` groups
 
-### `group.error`
+### `algebraGroup.errors`
 
-An object exposing the following error messages:
+An object exposing the following errors:
 
-* [argumentIsNotInGroup](#argumentisnotingroup)
-* [equalityIsNotReflexive](#equalityisnotreflexive)
-* [identityIsNotInGroup](#identityisnotingroup)
-* [identityIsNotNeutral](#identityisnotneutral)
+* [ArgumentIsNotInGroupError](#argumentisnotingrouperror)
+* [EqualityIsNotReflexiveError](#equalityisnotreflexiveerror)
+* [IdentityIsNotInGroupError](#identityisnotingrouperror)
+* [IdentityIsNotNeutralError](#identityisnotneutralerror)
 
-For example, the following snippets will throw.
+```javascript
+const {
+  ArgumentIsNotInGroupError,
+  EqualityIsNotReflexiveError,
+  IdentityIsNotInGroupError,
+  IdentityIsNotNeutralError
+} = algebraGroup.errors
+```
 
-#### argumentIsNotInGroup
+You can then do something like this
+
+```javascript
+try {
+  // Some code that could raise an error.
+} catch (error) {
+  switch (error) {
+    case instanceof ArgumentIsNotInGroupError:
+      // Handle error
+    break
+
+    case instanceof IdentityIsNotInGroupError:
+      // Handle error
+    break
+
+    default: throw error
+  }
+}
+```
+
+For example, the following snippets will throw the corresponding error.
+
+#### ArgumentIsNotInGroupError
 
 ```javascript
 R.inversion(0) // 0 is not in group R\{0}
-Rp.mul(1, 0.1, -1, 0.5) // -1 is not in R+
+Rp.mul(1, -1) // -1 is not in R+
 ```
 
-#### equalityIsNotReflexive
+#### EqualityIsNotReflexiveError
 
 ```javascript
 algebraGroup({
@@ -267,7 +296,7 @@ algebraGroup({
 })
 ```
 
-#### identityIsNotInGroup
+#### IdentityIsNotInGroupError
 
 ```javascript
 algebraGroup({
@@ -279,7 +308,7 @@ algebraGroup({
 })
 ```
 
-#### identityIsNotNeutral
+#### IdentityIsNotNeutralError
 
 ```javascript
 algebraGroup({

@@ -1,7 +1,12 @@
 const algebraGroup = require('algebra-group')
 const test = require('tape')
 
-const error = algebraGroup.error
+const {
+  ArgumentIsNotInGroupError,
+  EqualityIsNotReflexiveError,
+  IdentityIsNotInGroupError,
+  IdentityIsNotNeutralError
+} = algebraGroup.errors
 
 const zero = 0
 
@@ -128,15 +133,23 @@ test('R+ multiplicative group', function (t) {
 test('Errors', function (t) {
   t.plan(5)
 
-  t.throws(function () {
+  try {
     R.inversion(0) // 0 is not in group R\{0}
-  }, new RegExp(error.argumentIsNotInGroup))
+  } catch (error) {
+    if (error instanceof ArgumentIsNotInGroupError) {
+      t.ok('ArgumentIsNotInGroupError')
+    }
+  }
 
-  t.throws(function () {
-    Rp.mul(1, 0.1, -1, 0.5) // -1 is not in R+
-  }, new RegExp(error.argumentIsNotInGroup))
+  try {
+    Rp.mul(1, -1) // -1 is not in R+
+  } catch (error) {
+    if (error instanceof ArgumentIsNotInGroupError) {
+      t.ok('ArgumentIsNotInGroupError')
+    }
+  }
 
-  t.throws(function () {
+  try {
     algebraGroup({
       identity: 1,
       contains: isRealAndNotZero,
@@ -144,9 +157,13 @@ test('Errors', function (t) {
       compositionLaw: multiplication,
       inversion: inversion
     })
-  }, new RegExp(error.equalityIsNotReflexive))
+  } catch (error) {
+    if (error instanceof EqualityIsNotReflexiveError) {
+      t.ok('EqualityIsNotReflexiveError')
+    }
+  }
 
-  t.throws(function () {
+  try {
     algebraGroup({
       identity: -1,
       contains: isRealAndPositive,
@@ -154,9 +171,13 @@ test('Errors', function (t) {
       compositionLaw: multiplication,
       inversion: inversion
     })
-  }, new RegExp(error.identityIsNotInGroup))
+  } catch (error) {
+    if (error instanceof IdentityIsNotInGroupError) {
+      t.ok('IdentityIsNotInGroupError')
+    }
+  }
 
-  t.throws(function () {
+  try {
     algebraGroup({
       identity: 2,
       contains: isRealAndNotZero,
@@ -164,5 +185,9 @@ test('Errors', function (t) {
       compositionLaw: multiplication,
       inversion: inversion
     })
-  }, new RegExp(error.identityIsNotNeutral))
+  } catch (error) {
+    if (error instanceof IdentityIsNotNeutralError) {
+      t.ok('IdentityIsNotNeutralError')
+    }
+  }
 })

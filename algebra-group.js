@@ -1,24 +1,21 @@
 const no = require('not-defined')
 const staticProps = require('static-props')
 
-const pkg = require('./package.json')
-
-/**
- * Prepend package name to error message
- */
-
-function msg (str) {
-  return pkg.name + ': ' + str
+class ArgumentIsNotInGroupError extends TypeError {
+  constructor () { super('argument is not contained in group set') }
 }
 
-const error = {}
+class EqualityIsNotReflexiveError extends TypeError {
+  constructor () { super('"equality" is not reflexive') }
+}
 
-staticProps(error)({
-  argumentIsNotInGroup: msg('argument is not contained in group set'),
-  equalityIsNotReflexive: msg('"equality" is not reflexive'),
-  identityIsNotInGroup: msg('"identity" must be contained in group set'),
-  identityIsNotNeutral: msg('"identity" is not neutral')
-})
+class IdentityIsNotInGroupError extends TypeError {
+  constructor () { super('"identity" must be contained in group set') }
+}
+
+class IdentityIsNotNeutralError extends TypeError {
+  constructor () { super('"identity" is not neutral') }
+}
 
 /**
  * Defines an algebra group structure
@@ -89,7 +86,7 @@ function algebraGroup (given, naming) {
       if (contains.apply(null, args)) {
         return given[operator].apply(null, args)
       } else {
-        throw new TypeError(error.argumentIsNotInGroup)
+        throw new ArgumentIsNotInGroupError()
       }
     }
   }
@@ -130,16 +127,16 @@ function algebraGroup (given, naming) {
 
   // Check that e=e.
   if (given.equality(e, e) !== true) {
-    throw new TypeError(error.equalityIsNotReflexive)
+    throw new EqualityIsNotReflexiveError()
   }
 
   if (!given.contains(e)) {
-    throw new TypeError(error.identityIsNotInGroup)
+    throw new IdentityIsNotInGroupError()
   }
 
   // Check that e+e=e.
   if (!given.equality(given.compositionLaw(e, e), e)) {
-    throw new TypeError(error.identityIsNotNeutral)
+    throw new IdentityIsNotNeutralError()
   }
 
   const definition = {}
@@ -163,6 +160,13 @@ function algebraGroup (given, naming) {
   return group
 }
 
-staticProps(algebraGroup)({ error })
+const errors = {
+  ArgumentIsNotInGroupError,
+  EqualityIsNotReflexiveError,
+  IdentityIsNotInGroupError,
+  IdentityIsNotNeutralError
+}
+
+staticProps(algebraGroup)({ errors })
 
 module.exports = exports.default = algebraGroup
