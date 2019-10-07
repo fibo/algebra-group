@@ -9,7 +9,7 @@ function isInteger (n) {
   return (typeof n === 'number') && isFinite(n) && (n % 1 === 0)
 }
 
-function equality (a, b) { return a === b }
+function integerEquality (a, b) { return a === b }
 
 function addition (a, b) { return a + b }
 
@@ -18,7 +18,7 @@ function negation (a) { return -a }
 const Z = algebraGroup({
   identity: zero,
   contains: isInteger,
-  equality: equality,
+  equality: integerEquality,
   compositionLaw: addition,
   inversion: negation
 })
@@ -53,10 +53,28 @@ function multiplication (a, b) { return a * b }
 
 function inversion (a) { return 1 / a }
 
+function realEquality (a, b) {
+  // Consider
+  //
+  //     0.1 + 0.2 === 0.3
+  //
+  // It evaluates to false. Actually the expression
+  //
+  //     0.1 + 0.2
+  //
+  // will return
+  //
+  //     0.30000000000000004
+  //
+  // Hence we need to approximate equality with an epsilon.
+
+  return Math.abs(a - b) < Number.EPSILON
+}
+
 const R = algebraGroup({
   identity: 1,
   contains: isRealAndNotZero,
-  equality: equality,
+  equality: realEquality,
   compositionLaw: multiplication,
   inversion: inversion
 }, {
@@ -86,7 +104,7 @@ function isRealAndPositive (n) {
 const Rp = algebraGroup({
   identity: 1,
   contains: isRealAndPositive,
-  equality: equality,
+  equality: realEquality,
   compositionLaw: multiplication,
   inversion: inversion
 }, {
@@ -132,7 +150,7 @@ test('Errors', function (t) {
     algebraGroup({
       identity: -1,
       contains: isRealAndPositive,
-      equality: equality,
+      equality: realEquality,
       compositionLaw: multiplication,
       inversion: inversion
     })
@@ -142,7 +160,7 @@ test('Errors', function (t) {
     algebraGroup({
       identity: 2,
       contains: isRealAndNotZero,
-      equality: equality,
+      equality: realEquality,
       compositionLaw: multiplication,
       inversion: inversion
     })

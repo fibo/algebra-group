@@ -31,13 +31,13 @@
     "check-deps"
   ],
   "devDependencies": {
-    "dot-editorconfig": "^1.1.0",
+    "dot-editorconfig": "^1.1.1",
     "pre-commit": "^1.2.2",
-    "standa": "^2.0.1",
-    "tape": "^4.9.0"
+    "standa": "^14.0.0",
+    "tape": "^4.11.0"
   },
   "dependencies": {
-    "not-defined": "^2.0.1",
-    "static-props": "^1.1.1"
+    "not-defined": "^2.1.0",
+    "static-props": "^1.1.2"
   }
 }

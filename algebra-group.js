@@ -165,4 +165,4 @@ function algebraGroup (given, naming) {
 
 staticProps(algebraGroup)({ error })
 
-module.exports = algebraGroup
+module.exports = exports.default = algebraGroup

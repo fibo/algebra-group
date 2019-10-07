@@ -4,7 +4,6 @@
 
 [![NPM version](https://badge.fury.io/js/algebra-group.svg)](http://badge.fury.io/js/algebra-group)
 [![Build Status](https://travis-ci.org/fibo/algebra-group.svg?branch=master)](https://travis-ci.org/fibo/algebra-group?branch=master)
-[![Dependency Status](https://david-dm.org/fibo/algebra-group.svg)](https://david-dm.org/fibo/algebra-group)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Table Of Contents
@@ -41,12 +40,13 @@ const algebraGroup = require('algebra-group')
 const zero = 0
 
 // Define operators.
+
 function isInteger (a) {
   // NaN, Infinity and -Infinity are not allowed
   return (typeof n === 'number') && isFinite(n) && (n % 1 === 0)
 }
 
-function equality (a, b) { return a === b }
+function integerEquality (a, b) { return a === b }
 
 function addition (a, b) { return a + b }
 
@@ -56,7 +56,7 @@ function negation (a) { return -a }
 const Z = algebraGroup({
   identity: zero,
   contains: isInteger,
-  equality: equality,
+  equality: integerEquality,
   compositionLaw: addition,
   inversion: negation
 })
@@ -111,12 +111,30 @@ function multiplication (a, b) { return a * b }
 
 function inversion (a) { return 1 / a }
 
+function realEquality (a, b) {
+  // Consider
+  //
+  //     0.1 + 0.2 === 0.3
+  //
+  // It evaluates to false. Actually the expression
+  //
+  //     0.1 + 0.2
+  //
+  // will return
+  //
+  //     0.30000000000000004
+  //
+  // Hence we need to approximate equality with an epsilon.
+
+  return Math.abs(a - b) < Number.EPSILON
+}
+
 // Create Real multiplicative group a.k.a (R, *).
 
 const R = algebraGroup({
   identity: 1,
   contains: isRealAndNotZero,
-  equality: equality,
+  equality: realEquality,
   compositionLaw : multiplication,
   inversion: inversion
 }, {
@@ -169,7 +187,7 @@ function isRealAndPositive (n) {
 const Rp = algebraGroup({
   identity: 1,
   contains: isRealAndPositive,
-  equality: equality,
+  equality: realEquality,
   compositionLaw: multiplication,
   inversion: inversion
 }, {
