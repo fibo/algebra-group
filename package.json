@@ -2,18 +2,20 @@
   "name": "algebra-group",
   "description": "defines and algebra group structure",
   "version": "1.0.0",
-  "homepage": "http://g14n.info/algebra-group",
+  "types": "algebra-group.d.ts",
+  "exports": {
+    ".": {
+      "import": "./algebra-group.js"
+    }
+  },
+  "homepage": "https://fibo.github.io/algebra-group",
   "author": {
     "name": "Gianluca Casati",
-    "url": "http://g14n.info"
+    "url": "https://fibo.github.io"
   },
   "license": "MIT",
-  "main": "algebra-group.js",
   "scripts": {
-    "check-deps": "npm outdated",
-    "lint": "standa",
-    "postversion": "git push origin v${npm_package_version}; npm publish; git push origin master",
-    "test": "NODE_PATH=. tape test.js"
+    "postversion": "git push origin v${npm_package_version}; npm publish; git push origin master"
   },
   "repository": {
     "type": "git",
@@ -25,19 +27,6 @@
   "bugs": {
     "url": "https://github.com/fibo/algebra-group/issues"
   },
-  "pre-commit": [
-    "lint",
-    "test",
-    "check-deps"
-  ],
-  "devDependencies": {
-    "dot-editorconfig": "^1.1.1",
-    "pre-commit": "^1.2.2",
-    "standa": "^14.0.0",
-    "tape": "^4.11.0"
-  },
-  "dependencies": {
-    "not-defined": "^2.1.0",
-    "static-props": "^1.1.2"
-  }
+  "devDependencies": {},
+  "dependencies": {}
 }
