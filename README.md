@@ -2,26 +2,11 @@
 
 > defines an [algebra group][1] structure
 
-[![NPM version](https://badge.fury.io/js/algebra-group.svg)](http://badge.fury.io/js/algebra-group)
-[![Build Status](https://travis-ci.org/fibo/algebra-group.svg?branch=master)](https://travis-ci.org/fibo/algebra-group?branch=master)
-[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
-
-## Table Of Contents
-
-* [Installation](#installation)
-* [Examples](#examples)
-    - [Integer additive group](#integer-additive-group)
-    - [`R\{0}` multiplicative group](#r0-multiplicative-group)
-    - [`R+` multiplicative group](#r-multiplicative-group)
-* [API](#api)
-* [License](#license)
-* [Contributors](#contributors)
-
 ## Installation
 
 With [npm](https://npmjs.org/) do
 
-```bash
+```sh
 npm install algebra-group
 ```
 
@@ -322,12 +307,7 @@ algebraGroup({
 
 ## License
 
-[MIT](http://g14n.info/mit-license/)
-
-## Contributors
-
-* [fibo](https://github.com/fibo)
-* [xgbuils](https://github.com/xgbuils)
+[MIT](http://fibo.github.io/mit-license/)
 
 [1]: https://en.wikipedia.org/wiki/Group_(mathematics) "Group"
 [2]: https://en.wikipedia.org/wiki/Real_number "Real number"
